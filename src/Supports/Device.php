@@ -3,6 +3,7 @@
 namespace LaravelReady\Statistics\Supports;
 
 use DeviceDetector\DeviceDetector;
+use Illuminate\Support\Facades\Session;
 use LaravelReady\UltimateSupport\Supports\IpSupport;
 
 class Device
@@ -57,5 +58,22 @@ class Device
         $ip = IpSupport::getIpAddress();
 
         return $ip;
+    }
+
+    private static function getClientHash()
+    {
+        $useragent = request()->header('User-Agent');
+        $ip = self::getIp();
+        $date = date('Y-m-d');
+
+        $hash = md5("{$useragent}.{$ip}.{$date}");
+
+        if (Session::has('client_hash')) {
+            $hash = Session::get('client_hash');
+        } else {
+            Session::put('client_hash', $hash);
+        }
+
+        return $hash;
     }
 }
