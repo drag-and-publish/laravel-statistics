@@ -3,6 +3,7 @@
 namespace LaravelReady\Statistics\Supports;
 
 use DeviceDetector\DeviceDetector;
+use LaravelReady\UltimateSupport\Supports\IpSupport;
 
 class Device
 {
@@ -49,5 +50,12 @@ class Device
         $referrer = request()->header('Referer');
 
         return $referrer;
+    }
+
+    public static function getIp()
+    {
+        $ip = IpSupport::getIpAddress();
+
+        return $ip;
     }
 }
