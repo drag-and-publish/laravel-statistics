@@ -33,4 +33,21 @@ class Device
 
         return $data;
     }
+
+    public static function getBrowserLang()
+    {
+        $lang = request()->header('Accept-Language');
+        $lang = explode(',', $lang);
+        $lang = explode(';', $lang[0]);
+        $lang = $lang[0];
+
+        return $lang;
+    }
+
+    public static function getReferrer()
+    {
+        $referrer = request()->header('Referer');
+
+        return $referrer;
+    }
 }
