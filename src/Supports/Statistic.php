@@ -18,7 +18,7 @@ class Statistic
             $statistic->save();
         } else {
             $statistic = StatisticModel::create([
-                'ip' => Device::getIp(),
+                'ip' => Device::getIp()['ip_address'],
                 'ua_header' => $uaData['data']['ua_header'],
                 'city' => null,
                 'country' => null,

@@ -2,6 +2,7 @@
 
 namespace LaravelReady\Statistics\Supports;
 
+use DeviceDetector\ClientHints;
 use DeviceDetector\DeviceDetector;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -16,9 +17,9 @@ class Device
         if (Cache::has($hash)) {
             $data = Cache::get($hash);
         } else {
-            $useragent = request()->header('User-Agent');
+            $deviceDetector = new DeviceDetector(request()->header('User-Agent'));
+            $deviceDetector->parse();
 
-            $deviceDetector = new DeviceDetector($useragent);
             $client = $deviceDetector->getClient();
             $os = $deviceDetector->getOs();
 
@@ -67,7 +68,7 @@ class Device
 
     public static function getIp()
     {
-        $ip = IpSupport::getIpAddress();
+        $ip = IpSupport::getIpAddress(false);
 
         return $ip;
     }
@@ -81,7 +82,7 @@ class Device
             $ip = self::getIp();
             $date = date('Y-m-d');
 
-            $hash = md5("{$useragent}.{$ip}.{$date}");
+            $hash = md5("{$useragent}.{$ip['ip_address']}.{$date}");
 
             Session::put('client_hash', $hash);
         }
