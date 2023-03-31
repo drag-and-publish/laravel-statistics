@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('statistics', function (Blueprint $table) {
             $table->id();
 
-            $table->bigIncrements('id');
-            $table->timestamps();
-
             $table->nullableMorphs('statisticable');
 
             $table->ipAddress('ip')->comment('Client IP address');
