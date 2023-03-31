@@ -7,11 +7,17 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait Statisticable
 {
-    /**
-     * Shortable model polymorphic relationship
-     */
-    public function statisticable(): MorphOne
+
+    public function statistic(): MorphOne
     {
-        return $this->morphOne(Statistic::class, 'shortable');
+        return $this->morphOne(Statistic::class, 'statisticable');
+    }
+
+    /**
+     * Statisticable model polymorphic relationship
+     */
+    public function statisticable()
+    {
+        return $this->morphTo();
     }
 }

@@ -2,12 +2,13 @@
 
 namespace LaravelReady\Statistics\Supports;
 
+use Illuminate\Database\Eloquent\Model;
 use LaravelReady\Statistics\Supports\Device;
 use LaravelReady\Statistics\Models\Statistic as StatisticModel;
 
 class Statistic
 {
-    public static function touch(): void
+    public static function touch(Model $model = null): void
     {
         $uaData = Device::parseUserAgent();
 
@@ -18,6 +19,8 @@ class Statistic
             $statistic->save();
         } else {
             $statistic = StatisticModel::create([
+                'statisticable_type' => $model ? get_class($model) : null,
+                'statisticable_id' => $model ? $model->id : null,
                 'ip' => Device::getIp()['ip_address'],
                 'ua_header' => $uaData['data']['ua_header'],
                 'city' => null,

@@ -3,10 +3,12 @@
 namespace LaravelReady\Statistics\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use LaravelReady\Statistics\Traits\Statisticable;
 
 class Statistic extends Model
 {
+    use Statisticable;
+
     public function __construct(array $attributes = [])
     {
         $this->table = 'statistics';
