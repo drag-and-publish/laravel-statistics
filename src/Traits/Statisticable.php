@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelReady\UrlShortener\Traits;
+namespace LaravelReady\Statistics\Traits;
 
 use LaravelReady\Statistics\Models\Statistic;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
