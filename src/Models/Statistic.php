@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Statistic extends Model
 {
-    use SoftDeletes;
-
     public function __construct(array $attributes = [])
     {
         $this->table = 'statistics';

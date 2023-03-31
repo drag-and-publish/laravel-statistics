@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('statistic_reports', function (Blueprint $table) {
             $table->id();
 
+            $table->nullableMorphs('statisticable');
+
             $table->dateTime('start_date')->comment('Start date');
             $table->dateTime('end_date')->comment('End date');
             $table->string('type', 100)->comment('Report type');
