@@ -46,6 +46,7 @@ class Statistic extends Model
     ];
 
     protected $casts = [
+        'is_ip_parsed' => 'boolean',
         'is_bot' => 'boolean',
         'is_touchable' => 'datetime',
         'is_mobile' => 'boolean',

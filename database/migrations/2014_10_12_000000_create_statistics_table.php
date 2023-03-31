@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('browser_lang', 5)->nullable(true)->default(null)->comment('Browser language');
             $table->text('referrer')->length(1000)->nullable(true)->default(null)->comment('Referrer URL');
             $table->bigInteger('views')->default(0)->comment('View count');
+            $table->boolean('is_ip_parsed')->default(false)->comment('Is IP data parsed?');
 
             $table->boolean('is_bot')->default(false)->comment('Is bot?');
             $table->boolean('is_touchable')->default(false)->comment('Is touchable?');
