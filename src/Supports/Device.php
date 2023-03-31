@@ -17,11 +17,11 @@ class Device
             $data = Cache::get($hash);
         } else {
             $useragent = request()->header('User-Agent');
-    
+
             $deviceDetector = new DeviceDetector($useragent);
             $client = $deviceDetector->getClient();
             $os = $deviceDetector->getOs();
-    
+
             $data = [
                 'is_bot' => $deviceDetector->isBot(),
                 'is_touchable' => $deviceDetector->isTouchEnabled(),
@@ -77,9 +77,9 @@ class Device
             $useragent = request()->header('User-Agent');
             $ip = self::getIp();
             $date = date('Y-m-d');
-    
+
             $hash = md5("{$useragent}.{$ip}.{$date}");
-    
+
             Session::put('client_hash', $hash);
         }
 
