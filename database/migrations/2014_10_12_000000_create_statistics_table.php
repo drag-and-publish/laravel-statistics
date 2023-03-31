@@ -17,7 +17,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
 
-            $table->bigInteger('subject_id')->nullable()->comment('URL Id');
+            $table->nullableMorphs('statisticable');
+
             $table->ipAddress('ip')->comment('Client IP address');
             $table->text('ua_header')->nullable(true)->default(null)->comment('User Agent Header');
 

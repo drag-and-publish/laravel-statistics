@@ -1,4 +1,5 @@
 <?php
+
 namespace LaravelReady\Statistics;
 
 use Illuminate\Routing\Router;
@@ -15,7 +16,8 @@ final class ServiceProvider extends BaseServiceProvider
     public function boot(Router $router): void
     {
         $this->bootPublishes();
-                 $this->loadRoutes();    }
+        $this->loadRoutes();
+    }
 
     /**
      * Register any application services
@@ -37,14 +39,15 @@ final class ServiceProvider extends BaseServiceProvider
         $this->publishes([
             __DIR__ . '/../config/statistics.php' => $this->app->configPath('statistics.php'),
         ], 'statistics-config');
-         // migrations
+        // migrations
         $migrationsPath = __DIR__ . '/../database/migrations/';
 
         $this->publishes([
             $migrationsPath => database_path('migrations/laravel-ready/statistics')
         ], 'statistics-migrations');
 
-        $this->loadMigrationsFrom($migrationsPath);    }
+        $this->loadMigrationsFrom($migrationsPath);
+    }
     /**
      * Load package specific routes
      *
