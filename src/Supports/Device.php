@@ -49,8 +49,8 @@ class Device
     {
         $lang = request()->header('Accept-Language');
         $lang = explode(',', $lang);
-        $lang = explode(';', $lang[0]);
-        $lang = $lang[0];
+        $lang = explode(';', $lang[0] ?? []);
+        $lang = $lang[0] ?? null;
 
         return $lang;
     }
