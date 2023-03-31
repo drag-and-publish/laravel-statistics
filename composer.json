@@ -21,8 +21,8 @@
         "source": "https://github.com/laravel-ready/statistics"
     },
     "require": {
-        "php": "^8.1",
-        "illuminate/support": "^10.3",
+        "php": "^8.1 || ^8.0",
+        "illuminate/support": "^10.0 || ^9.0",
         "laravel-ready/ultimate-support": "^1.1",
         "matomo/device-detector": "^6.1"
     },
