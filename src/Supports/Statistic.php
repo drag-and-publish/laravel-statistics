@@ -14,7 +14,11 @@ class Statistic
     {
         $uaData = Device::parseUserAgent();
 
-        $statistic = StatisticModel::where('client_hash', $uaData['hash'])->first();
+        $statistic = StatisticModel::where([
+            ['client_hash', '=', $uaData['hash']],
+            ['statisticable_type', '=', $model ? get_class($model) : null],
+            ['statisticable_id', '=', $model ? $model->id : null],
+        ])->first();
 
         if ($statistic) {
             $statistic->views = $statistic->views + 1;
