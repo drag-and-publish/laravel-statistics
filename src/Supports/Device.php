@@ -3,6 +3,7 @@
 namespace LaravelReady\Statistics\Supports;
 
 use DeviceDetector\DeviceDetector;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use LaravelReady\UltimateSupport\Supports\IpSupport;
 
@@ -10,28 +11,36 @@ class Device
 {
     public static function parseUserAgent()
     {
-        $useragent = request()->header('User-Agent');
+        $hash = self::getClientHash();
 
-        $deviceDetector = new DeviceDetector($useragent);
-        $client = $deviceDetector->getClient();
-        $os = $deviceDetector->getOs();
+        if (Cache::has($hash)) {
+            $data = Cache::get($hash);
+        } else {
+            $useragent = request()->header('User-Agent');
+    
+            $deviceDetector = new DeviceDetector($useragent);
+            $client = $deviceDetector->getClient();
+            $os = $deviceDetector->getOs();
+    
+            $data = [
+                'is_bot' => $deviceDetector->isBot(),
+                'is_touchable' => $deviceDetector->isTouchEnabled(),
+                'is_mobile' => $deviceDetector->isMobile(),
+                'is_desktop' => $deviceDetector->isDesktop(),
+                'client' => $client['name'] ? $client['name'] : null,
+                'client_type' => $client['type'] ? $client['type'] : null,
+                'client_version' => $client['version'] ? $client['version'] : null,
+                'device_type' => $deviceDetector->getDeviceName(),
+                'device_brand' => $deviceDetector->getBrandName(),
+                'device_model' => $deviceDetector->getModel(),
+                'ua_header' => $deviceDetector->getUserAgent(),
+                'os_name' => $os['name'] ? $os['name'] : null,
+                'os_version' => $os['version'] ? $os['version'] : null,
+                'platform' => $os['platform'] ? $os['platform'] : null
+            ];
 
-        $data = [
-            'is_bot' => $deviceDetector->isBot(),
-            'is_touchable' => $deviceDetector->isTouchEnabled(),
-            'is_mobile' => $deviceDetector->isMobile(),
-            'is_desktop' => $deviceDetector->isDesktop(),
-            'client' => $client['name'] ? $client['name'] : null,
-            'client_type' => $client['type'] ? $client['type'] : null,
-            'client_version' => $client['version'] ? $client['version'] : null,
-            'device_type' => $deviceDetector->getDeviceName(),
-            'device_brand' => $deviceDetector->getBrandName(),
-            'device_model' => $deviceDetector->getModel(),
-            'ua_header' => $deviceDetector->getUserAgent(),
-            'os_name' => $os['name'] ? $os['name'] : null,
-            'os_version' => $os['version'] ? $os['version'] : null,
-            'platform' => $os['platform'] ? $os['platform'] : null
-        ];
+            Cache::put($hash, $data, 60 * 24 * 30);
+        }
 
         return $data;
     }
@@ -62,15 +71,15 @@ class Device
 
     private static function getClientHash()
     {
-        $useragent = request()->header('User-Agent');
-        $ip = self::getIp();
-        $date = date('Y-m-d');
-
-        $hash = md5("{$useragent}.{$ip}.{$date}");
-
         if (Session::has('client_hash')) {
             $hash = Session::get('client_hash');
         } else {
+            $useragent = request()->header('User-Agent');
+            $ip = self::getIp();
+            $date = date('Y-m-d');
+    
+            $hash = md5("{$useragent}.{$ip}.{$date}");
+    
             Session::put('client_hash', $hash);
         }
 
