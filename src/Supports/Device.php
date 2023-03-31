@@ -39,10 +39,13 @@ class Device
                 'platform' => $os['platform'] ? $os['platform'] : null
             ];
 
-            Cache::put($hash, $data, 60 * 24 * 30);
+            Cache::put($hash, $data, now()->days(1));
         }
 
-        return $data;
+        return [
+            'hash' => $hash,
+            'data' => $data
+        ];
     }
 
     public static function getBrowserLang()
