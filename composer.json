@@ -3,7 +3,6 @@
     "description": "Ready to use Laravel statistic package",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.0",
     "keywords": [
         "stats",
         "laravel",
