@@ -35,8 +35,21 @@ php artisan migrate --path=/database/migrations/laravel-ready/statistics
 
 ## 📝 Usage
 
+Add `Statisticable` trait to your model
+
 ```php
-use LaravelReady\Statistics\Statistics;
+use LaravelReady\Statistics\Traits\Statisticable;
+
+class Post extends Model
+{
+    use Statisticable;
+}
+```
+
+Then call `touch` method to run statistic mechanism
+
+```php
+use LaravelReady\Statistics\Supports\Statistic;
 
 Statistic::touch($model);
 ```
