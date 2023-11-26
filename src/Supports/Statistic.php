@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
-use LaravelReady\Statistics\Supports\Device;
+use LaravelReady\Statistics\Supports\Detector;
 use LaravelReady\Statistics\Models\StatisticHit;
 use LaravelReady\Statistics\Models\Statistic as StatisticModel;
 
@@ -20,7 +20,7 @@ class Statistic
      */
     public static function touch(Model $model = null): void
     {
-        $uaData = Device::parseUserAgent();
+        $uaData = Detector::parseUserAgent();
 
         $statistic = StatisticModel::where([
             ['client_hash', '=', $uaData['hash']],
@@ -35,7 +35,7 @@ class Statistic
             $data = [
                 'statisticable_type' => $model ? get_class($model) : null,
                 'statisticable_id' => $model ? $model->id : null,
-                'ip' => Device::getIp()['ip_address'],
+                'ip' => Detector::getIp()['ip_address'],
                 'ua_header' => $uaData['data']['ua_header'],
                 'city' => null,
                 'country' => null,
@@ -44,7 +44,7 @@ class Statistic
                 'client_type' => $uaData['data']['client_type'],
                 'client_version' => $uaData['data']['client_version'],
                 'client_hash' => $uaData['hash'],
-                'browser_lang' => Device::getBrowserLang(),
+                'browser_lang' => Detector::getBrowserLang(),
                 'referrer' => request()->header('Referer'),
                 'views' => 1,
                 'is_bot' => $uaData['data']['is_bot'],
@@ -76,7 +76,7 @@ class Statistic
         DB::table('statistic_hits')->insert([
             'statisticable_type' => $model ? get_class($model) : null,
             'statisticable_id' => $model ? $model->id : null,
-            'ip' => Device::getIp()['ip_address'],
+            'ip' => Detector::getIp()['ip_address'],
             'ua_header' => request()->header('User-Agent') ?: null,
             'referrer' => request()->header('Referer'),
         ]);

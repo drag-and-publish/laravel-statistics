@@ -2,13 +2,12 @@
 
 namespace LaravelReady\Statistics\Supports;
 
-use DeviceDetector\ClientHints;
 use DeviceDetector\DeviceDetector;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use LaravelReady\UltimateSupport\Supports\IpSupport;
 
-class Device
+class Detector
 {
     public static function parseUserAgent(string|null $userAgent = null): array
     {
