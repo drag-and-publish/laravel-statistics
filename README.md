@@ -59,9 +59,33 @@ Access statistic data
 
 ```php
 $stats = $model->load('statistics');
-
-dd($stats->statistics->toArray());
 ```
+
+Process statistic data with scheduled command (or you can use `LaravelReady\Statistics\Jobs\ProcessStatistic` job)
+
+```php
+<?php
+
+namespace App\Console;
+
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+
+class Kernel extends ConsoleKernel
+{
+    /**
+     * Define the application's command schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('statistics:process')->everyMinute();
+    }
+...
+```
+
 
 ## ⚓Credits
 
