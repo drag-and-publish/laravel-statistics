@@ -2,15 +2,15 @@
 
 namespace LaravelReady\Statistics\Traits;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use LaravelReady\Statistics\Models\Statistic;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait Statisticable
 {
 
-    public function statistic(): MorphOne
+    public function statistics(): MorphMany
     {
-        return $this->morphOne(Statistic::class, 'statisticable');
+        return $this->morphMany(Statistic::class, 'statisticable');
     }
 
     /**
