@@ -3,6 +3,7 @@
 namespace LaravelReady\Statistics\Supports;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use LaravelReady\Statistics\Supports\Device;
@@ -10,6 +11,12 @@ use LaravelReady\Statistics\Models\Statistic as StatisticModel;
 
 class Statistic
 {
+    /**
+     * Process the data and save it to database
+     * 
+     * @param Model|null $model
+     * @return void
+     */
     public static function touch(Model $model = null): void
     {
         $uaData = Device::parseUserAgent();
@@ -53,6 +60,25 @@ class Statistic
 
             $statistic = StatisticModel::create($data);
         }
+    }
+
+    /**
+     * Hit the statistic without any data processing
+     * This method is useful for high traffic websites
+     * Then you can process the data with job queue
+     * 
+     * @param Model|null $model
+     * @return void
+     */
+    public static function hit(Model $model = null): void
+    {
+        DB::table('statistics_hits')->insert([
+            'statisticable_type' => $model ? get_class($model) : null,
+            'statisticable_id' => $model ? $model->id : null,
+            'ip' => Device::getIp()['ip_address'],
+            'ua_header' => request()->header('User-Agent') ?: null,
+            'referrer' => request()->header('Referer'),
+        ]);
     }
 
     public static function processIpData(): void

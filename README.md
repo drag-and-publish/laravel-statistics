@@ -46,13 +46,14 @@ class Post extends Model
 }
 ```
 
-Then call `touch` method to run statistic mechanism
+Then call `touch` or `hit` method to run statistic mechanism
 
 ```php
 use LaravelReady\Statistics\Supports\Statistic;
 
-Statistic::touch($model);
-```
+Statistic::touch($model); // process data then save it
+Statistic::hit($model); // just saves raw data without processing (then you can process it later with jobs)
+``` 
 
 ## ⚓Credits
 
