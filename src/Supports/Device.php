@@ -10,14 +10,14 @@ use LaravelReady\UltimateSupport\Supports\IpSupport;
 
 class Device
 {
-    public static function parseUserAgent()
+    public static function parseUserAgent(string|null $userAgent = null): array
     {
-        $hash = self::getClientHash();
+        $hash = self::getClientHash($userAgent);
 
         if (Cache::has($hash)) {
             $data = Cache::get($hash);
         } else {
-            $deviceDetector = new DeviceDetector(request()->header('User-Agent'));
+            $deviceDetector = new DeviceDetector($userAgent ?: request()->header('User-Agent'));
             $deviceDetector->parse();
 
             $client = $deviceDetector->getClient();
@@ -73,12 +73,12 @@ class Device
         return $ip;
     }
 
-    private static function getClientHash()
+    private static function getClientHash(string | null $userAgent = null): string
     {
         if (Session::has('client_hash')) {
             $hash = Session::get('client_hash');
         } else {
-            $useragent = request()->header('User-Agent');
+            $useragent = $userAgent || request()->header('User-Agent');
             $ip = self::getIp();
             $date = date('Y-m-d');
 

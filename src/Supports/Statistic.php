@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use LaravelReady\Statistics\Supports\Device;
+use LaravelReady\Statistics\Models\StatisticHit;
 use LaravelReady\Statistics\Models\Statistic as StatisticModel;
 
 class Statistic
@@ -72,7 +73,7 @@ class Statistic
      */
     public static function hit(Model $model = null): void
     {
-        DB::table('statistics_hits')->insert([
+        DB::table('statistic_hits')->insert([
             'statisticable_type' => $model ? get_class($model) : null,
             'statisticable_id' => $model ? $model->id : null,
             'ip' => Device::getIp()['ip_address'],
@@ -81,6 +82,33 @@ class Statistic
         ]);
     }
 
+    /**
+     * Process the raw hits
+     * 
+     * @return void
+     */
+    public static function processUaData(): void {
+        $rawHits = StatisticHit::limit(
+            Config::get('statistics.ip2location.process_ip_data_per_cycle', 1000)
+        )->get();
+
+        foreach ($rawHits as $hit) {
+            // get model from statisticable_type and statisticable_id
+            $model = $hit->statisticable_type::find($hit->statisticable_id);
+
+            // process the data
+            self::touch($model);
+
+            // delete the raw hit
+            $hit->delete();
+        }
+    }
+
+    /**
+     * Process the IP data
+     * 
+     * @return void
+     */
     public static function processIpData(): void
     {
         $ipDataUnprocessedStatistics = StatisticModel::where('is_ip_parsed', false)->limit(
