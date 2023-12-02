@@ -86,6 +86,61 @@ class Kernel extends ConsoleKernel
 ...
 ```
 
+## 🐳 Docker Configs
+
+İf you want to use ip2location database, you can use docker image.
+
+### Environment Variables
+
+Define your environment variables in `.env` file (your laravel project)
+
+```yml
+# ip2location
+IP2LOCATION_TOKEN={YOUR_TOKEN}
+IP2LOCATION_CODE=DB11-LITE
+IP2LOCATION_IP_TYPE=BOTH
+IP2LOCATION_MYSQL_PORT=1010
+IP2LOCATION_MYSQL_HOST=127.0.0.1
+IP2LOCATION_MYSQL_DBNAME=ip2location_database
+IP2LOCATION_MYSQL_USERNAME=admin
+IP2LOCATION_MYSQL_PASSWORD=secret
+```
+
+### Docker Compose
+
+Create `docker-compose.yml` file in your laravel project
+
+```yml
+version: "3.8"
+
+services:
+    # ip2location server
+    ip2location_mysql:
+        image: ip2location/mysql:latest
+        container_name: ip2location_mysql
+        restart: unless-stopped
+        ports:
+            - ${IP2LOCATION_MYSQL_PORT}:3306
+        environment:
+            TOKEN: ${IP2LOCATION_TOKEN}
+            CODE: ${IP2LOCATION_CODE}
+            IP_TYPE: ${IP2LOCATION_IP_TYPE}
+            MYSQL_PASSWORD: ${IP2LOCATION_MYSQL_PASSWORD}
+        networks:
+            - mysql_net
+
+networks:
+    mysql_net:
+        driver: bridge
+```
+
+Run docker containers
+
+```bash
+docker-compose up -d
+```
+
+Then wait for ip2location database to be downloaded (*this may some time*).
 
 ## ⚓Credits
 
