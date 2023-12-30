@@ -5,7 +5,7 @@ namespace LaravelReady\Statistics\Console\Commands;
 use Illuminate\Console\Command;
 use LaravelReady\Statistics\Supports\Statistic;
 
-class DDDD extends Command
+class DataProcessCommand extends Command
 {
     /**
      * The name and signature of the console command.
