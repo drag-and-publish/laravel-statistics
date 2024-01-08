@@ -74,17 +74,11 @@ class Detector
 
     private static function getClientHash(string | null $userAgent = null): string
     {
-        if (Session::has('client_hash')) {
-            $hash = Session::get('client_hash');
-        } else {
-            $useragent = $userAgent || request()->header('User-Agent');
-            $ip = self::getIp();
-            $date = date('Y-m-d');
+        $useragent = $userAgent ?? request()->header('User-Agent');
+        $ip = self::getIp();
+        $date = date('Y-m-d');
 
-            $hash = md5("{$useragent}.{$ip['ip_address']}.{$date}");
-
-            Session::put('client_hash', $hash);
-        }
+        $hash = md5("{$useragent}.{$ip['ip_address']}.{$date}");
 
         return $hash;
     }
