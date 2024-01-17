@@ -18,7 +18,7 @@ class Statistic
      * @param Model|null $model
      * @return void
      */
-    public static function touch(Model $model, string $userAgent = null, string $ipAddress = null): void
+    public static function touch(Model $model, string $userAgent = null, string $ipAddress = null, array $hit = []): void
     {
         $uaData = Detector::parseUserAgent($userAgent);
 
@@ -57,6 +57,7 @@ class Statistic
                 'os_name' => $uaData['data']['os_name'],
                 'os_version' => $uaData['data']['os_version'],
                 'platform' => $uaData['data']['platform'],
+                'date' => $hit['date'] ?? now()->timestamp,
             ];
 
             $statistic = StatisticModel::create($data);
@@ -79,6 +80,7 @@ class Statistic
             'ip' => Detector::getIp()['ip_address'],
             'ua_header' => request()->header('User-Agent') ?: null,
             'referrer' => request()->header('Referer'),
+            'date' => now()->timestamp
         ]);
     }
 
@@ -98,7 +100,7 @@ class Statistic
             $model = $hit->statisticable_type::find($hit->statisticable_id);
 
             // process the data
-            self::touch($model, $hit->ua_header, $hit->ip);
+            self::touch($model, $hit->ua_header, $hit->ip, $hit->toArray());
 
             // delete the raw hit
             $hit->delete();
