@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('ua_header')->nullable(true)->default(null)->comment('User Agent Header');
             $table->text('referrer')->length(1000)->nullable(true)->default(null)->comment('Referrer URL');
             $table->ipAddress('ip')->comment('Client IP address');
+            
+            $table->bigInteger('date')->comment('Date of hit');
         });
     }
 

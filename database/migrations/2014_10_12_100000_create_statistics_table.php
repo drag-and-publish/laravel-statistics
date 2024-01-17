@@ -44,7 +44,7 @@ return new class extends Migration
             $table->string('os_version', 100)->nullable(true)->default(null)->comment('Operating system version');
             $table->string('platform', 100)->nullable(true)->default(null)->comment('CPU platform');
 
-            $table->timestamps();
+            $table->bigInteger('date')->comment('Date of hit');
         });
     }
 
