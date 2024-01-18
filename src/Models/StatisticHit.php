@@ -8,4 +8,6 @@ use LaravelReady\Statistics\Traits\Statisticable;
 class StatisticHit extends Model
 {
     use Statisticable;
+
+    public $timestamps = false;
 }

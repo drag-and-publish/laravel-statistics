@@ -9,6 +9,8 @@ class Statistic extends Model
 {
     use Statisticable;
 
+    public $timestamps = false;
+
     public function __construct(array $attributes = [])
     {
         $this->table = 'statistics';
