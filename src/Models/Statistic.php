@@ -45,6 +45,7 @@ class Statistic extends Model
         'os_name',
         'os_version',
         'platform',
+        'date',
     ];
 
     protected $casts = [

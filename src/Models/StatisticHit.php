@@ -10,4 +10,13 @@ class StatisticHit extends Model
     use Statisticable;
 
     public $timestamps = false;
+
+    protected $fillable = [
+        'statisticable_type',
+        'statisticable_id',
+        'ua_header',
+        'referrer',
+        'ip',
+        'date',
+    ];
 }
